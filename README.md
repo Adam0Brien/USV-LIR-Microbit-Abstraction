@@ -2,7 +2,7 @@
 Final year project Applied Computing (IoT)
 
 <br>
-<img src="img\USVLIR.jpg" class="center">
+<img src="img\USVLIR.jpg" class="center" width="600" height="800">
 <br>
 
 # Executive summary
