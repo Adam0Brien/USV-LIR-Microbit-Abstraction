@@ -12,3 +12,8 @@ This makes the board usable for the sensor deployment system along with the micr
 <br>
 <img src="..\img\pcb.jpg" class="center" width="600" height="800">
 <br>
+
+
+<br>
+<img src="..\img\pcb-render.jpg" class="center" width="600" height="800">
+<br>
