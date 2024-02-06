@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2024-02-06T14:21:43Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.6.2"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "sensor-pod"
+        },
+        "Owner": "Adam O'Brien <20093460@mail.wit.ie>",
+        "Size": {
+            "X": 54.28,
+            "Y": 125.72
+        }
+    }
+}

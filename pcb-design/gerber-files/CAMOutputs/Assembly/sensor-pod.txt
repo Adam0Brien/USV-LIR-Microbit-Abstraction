@@ -1,0 +1,18 @@
+Partlist exported from C:/Users/adamo/OneDrive/Desktop/College/Semester-8/Final-Year-Project/USV-LIR-Microbit-Abstraction/pcb-design/sensor-pod.sch at 06/02/2024 14:21
+
+Qty Value       Device      Package    Parts                     Description                           MF    MPN        OC_FARNELL OC_NEWARK POPULARITY SPICEPREFIX
+4               R-US_0204/7 0204/7     PHOTORESISTOR, R2, R3, R4 RESISTOR, American symbol                                                   48         R          
+2   3.3V        22-23-2021  22-23-2021 X11, X12                  .100" (2.54mm) Center Header - 2 Pin  MOLEX 22-23-2021 1462926    25C3832   40                    
+1   3.3V_LED    SFH482      SFH482     D2                        IR LED                                                                      0                     
+1   4.7k        R-US_0204/7 0204/7     R1                        RESISTOR, American symbol                                                   48         R          
+2   5V          22-23-2021  22-23-2021 1, X4                     .100" (2.54mm) Center Header - 2 Pin  MOLEX 22-23-2021 1462926    25C3832   40                    
+1   5V_LED      SFH482      SFH482     D1                        IR LED                                                                      0                     
+2   I2C_3.3V    22-23-2041  22-23-2041 X8, X9                    .100" (2.54mm) Center Header - 4 Pin  MOLEX 22-23-2041 1462920    38C0355   21                    
+1   I2C_5V      22-23-2041  22-23-2041 X10                       .100" (2.54mm) Center Header - 4 Pin  MOLEX 22-23-2041 1462920    38C0355   21                    
+1   MB-LEFT     22-23-2111  22-23-2111 X15                       .100" (2.54mm) Center Header - 11 Pin MOLEX 22-23-2111 5388879    27C9916   0                     
+1   MB-RIGHT    22-23-2111  22-23-2111 X16                       .100" (2.54mm) Center Header - 11 Pin MOLEX 22-23-2111 5388879    27C9916   0                     
+1   MOTOR_1     22-23-2031  22-23-2031 X6                        .100" (2.54mm) Center Header - 3 Pin  MOLEX 22-23-2031 1462950    30C0862   35                    
+1   MOTOR_2     22-23-2031  22-23-2031 X7                        .100" (2.54mm) Center Header - 3 Pin  MOLEX 22-23-2031 1462950    30C0862   35                    
+1   PH_SENSOR   22-23-2031  22-23-2031 X1                        .100" (2.54mm) Center Header - 3 Pin  MOLEX 22-23-2031 1462950    30C0862   35                    
+1   TEMPERATURE 22-23-2031  22-23-2031 X5                        .100" (2.54mm) Center Header - 3 Pin  MOLEX 22-23-2031 1462950    30C0862   35                    
+1   TURBIDITY   22-23-2031  22-23-2031 X3                        .100" (2.54mm) Center Header - 3 Pin  MOLEX 22-23-2031 1462950    30C0862   35                    
