@@ -1,3 +1,4 @@
+
 namespace USVSensorPod {
 
 
@@ -13,10 +14,10 @@ namespace USVSensorPod {
     //% block="Sensor Pod Temperature °C"
     //% group="Sensors"
     export function calculateTempC(): number {
-        let temp = dstemp.celsius(DigitalPin.P8)
+        let temp = celsius(DigitalPin.P8)
         basic.pause(200)
         serial.writeLine("Temp:" + Math.round(temp))
-        let temp2 = dstemp.celsius(DigitalPin.P8)
+        let temp2 = celsius(DigitalPin.P8)
         let temperature_C: number
         if (temp >= -10 && temp <= 85) {
             temperature_C = temp
@@ -33,7 +34,7 @@ namespace USVSensorPod {
         let temp = celsius(DigitalPin.P8)
         basic.pause(200)
         serial.writeLine("Temp:" + Math.round(temp))
-        let temp2 = dstemp.celsius(DigitalPin.P8)
+        let temp2 = celsius(DigitalPin.P8)
         let temperature_C: number
         if (temp >= -10 && temp <= 85) {
             temperature_C = temp
@@ -266,3 +267,4 @@ function sensorError(errCallback: (errorMessage: string, errorCode: number, port
     }
     setErrorHandler(errorHandler);
 };
+
