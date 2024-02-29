@@ -30,7 +30,7 @@ namespace USVSensorPod {
     //% block="Sensor Pod Temperature °F"
     //% group="Sensors"
     export function calculateTempF(): number {
-        let temp = dstemp.celsius(DigitalPin.P8)
+        let temp = celsius(DigitalPin.P8)
         basic.pause(200)
         serial.writeLine("Temp:" + Math.round(temp))
         let temp2 = dstemp.celsius(DigitalPin.P8)
@@ -210,3 +210,59 @@ namespace USVSensorPod {
         BK = 0
         cmd(0)
     }
+
+    // Taken from microbit-dstemp
+
+//% whenUsed
+let errorHandler: Action = null;
+//% whenUsed
+let errorObjectIdx: number = 0;
+//% whenUsed
+let errorPort: number = -1;
+
+// TODO: Localization
+const errorMsgs = ["No Error", "Not Connected", "Start Error", "Read Timeout", "Conversion Failure"];
+
+//% blockId="celsius" block="temperature (\u00B0\\C) on %pin|"
+//% shim=dstemp::celsius
+//% parts=dstemp trackArgs=0
+function celsius(pin: DigitalPin): number {
+    return 32.6;
+}
+
+// Helper function
+//% shim=dstemp::setErrorHandler
+function setErrorHandler(a: Action) {
+    errorHandler = a;
+}
+
+// Helper function
+//% shim=dstemp::getErrorObjectIdx
+function getErrorObjectIdx(): number {
+    return errorObjectIdx;
+}
+
+// Helper function
+//% shim=dstemp::getErrorPort
+function getErrorPort(): number {
+    return errorPort;
+}
+
+/**
+ * Set a handler for errors 
+ * @param errCallback The error handler 
+ */
+//% blockId="error" block="temperature sensor error"
+//% draggableParameters="reporter" weight=0
+function sensorError(errCallback: (errorMessage: string, errorCode: number, port: number) => void) {
+    if (errCallback) {
+        errorHandler = () => {
+            let i = getErrorObjectIdx();
+            let p = getErrorPort();
+            errCallback(errorMsgs[i], i, p);
+        };
+    } else {
+        errorHandler = null;
+    }
+    setErrorHandler(errorHandler);
+};
