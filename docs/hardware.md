@@ -37,6 +37,15 @@ Below you will find the current PCB iteration along with letters over specific p
 - X = SDA (I2C)
 - Y = SCL (I2C)
 
+Sensor/I2C Micro: bit pin signals
+- Temp -> Digital Pin 8
+- pH -> Analog Pin 0
+- Turbidity -> Analog Pin 1
+- LDR -> Analog Pin 2
+- M1 -> Analog Pin 3
+- M2 -> Analog Pin 4
+- SCL -> Pin 19
+- SDA -> Pin 20
 
 <div style="text-align: center;">
         <img src="../img/pcb-pinout.png" style="width: 300px;" />
