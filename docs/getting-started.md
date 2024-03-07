@@ -23,7 +23,7 @@ To get started with the USV-Lir Sensor Pod, follow these steps:
         
     <img src="/img/getting-started2.png" class="center" width="600" height="400">
     
-    - Paste the code from https://github.com/Adam0Brien/USV-LIR-Microbit-Abstraction/blob/main/sensor-pod/sensorPod.ts
+    - Paste the code from https://github.com/Adam0Brien/USV-LIR-Microbit-Abstraction/blob/main/USV/sensor-pod/sensorPod.ts
     
     <img src="/img/getting-started3.png" class="center" width="600" height="400">
     
