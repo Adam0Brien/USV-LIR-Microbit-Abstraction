@@ -1,17 +1,17 @@
-namespace USVAPI {
+namespace USV {
 
 
     export enum direction {
         //% block="Forward Fast"
-        FullSpeedForward = 120,
+        ForwardFast = 120,
         //% block="Backward Fast"
-        FullSpeedBackwards = 60,
+        BackwardsFast = 60,
         //% block="Forward Slow"
-        HalfSpeedForward = 105,
+        ForwardSlow = 95,
         //% block="Backward Slow"
-        HalfSpeedBackward = 75,
+        BackwardSlow = 80,
         //% block="Stop"
-        Stop = 89,
+        Stop = 90,
     }
 
     export enum Motors {
@@ -20,33 +20,50 @@ namespace USVAPI {
         Motor1 = 0,
         //%blockId=usv_motor_two
         //% block="Right Motor"
-        Motor2 = 1
+        Motor2 = 1,
+        //%blockId=usv_motor_both
+        //% block="All Motors"
+        Both = 2
     }
 
     /**
-     * Configure the USV Servos. # TODO
+     * Configure the USV Servos.
      */
     //% weight=50 
     //% color=#7F74D5
     //% subcategory=USV
     //% group="Movement"
-    //% blockId=USV_Motor block="Move |%Motor|%speed"
+    //% blockId=USV_Motor block="Move |%Motor|%speed for |%ms seconds"
     //% speed.min=60 speed.max=120
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
-    export function USV_Motor(index: Motors, speed: direction): void {
-        let buf = pins.createBuffer(2);
+    export function USV_Motor(index: Motors, speed: direction, sec: number): void {
         if (index == 0) {
-            buf[0] = 0x14; // turn left motor
+            for(let index = 0; index <= sec; index++) {
+                for (let index = 0; index <= 10; index++) {
+                    basic.pause(100)
+                    radio.sendValue("left", speed)
+                }
+            }
         }
         if (index == 1) {
-            buf[0] = 0x15; // turn right motor
+            for (let index = 0; index <= sec; index++) {
+                for (let index = 0; index <= 10; index++) {
+                    basic.pause(100)
+                    radio.sendValue("right", speed)
+                }
+            }
         }
-
-        buf[1] = speed;
-        pins.i2cWriteBuffer(0x16, buf);
+        if (index == 2) {
+            for (let index = 0; index <= sec; index++) {
+                for (let index = 0; index <= 10; index++){
+                    basic.pause(100)
+                    radio.sendValue("left", speed)
+                    radio.sendValue("right", speed)
+                }
+            }
+        }
     }
 
-    // # TODO
     //% blockId=stopMotors
     //% block="Stop Motors"
     //% weight=50 
@@ -54,7 +71,29 @@ namespace USVAPI {
     //% subcategory=USV
     //% group="Movement"
     export function stopMotors() {
+        radio.sendValue("left", 90)
+        radio.sendValue("right", 90)
+    }
 
+
+    //% blockId=ArmUSV
+    //% block="Arm USV"
+    //% weight=50 
+    //% color=#7F74D5
+    //% subcategory=USV
+    //% group="Startup"
+    export function armUSV() {
+        let Arm = 1
+    }
+
+    //% blockId=disarmUSV
+    //% block="Disarm USV"
+    //% weight=50 
+    //% color=#7F74D5
+    //% subcategory=USV
+    //% group="Startup"
+    export function disarmUSV() {
+        let Arm = 0
     }
 
 
@@ -74,7 +113,7 @@ namespace USVAPI {
     //% color=#29D215
     //% subcategory=USV
     //% group="Sensor Deployment"
-    //% blockId=USV_Crane 
+    //% blockId=USV_Deploy
     //% block="Sensor Deploy |%Motor for %number seconds"
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
     export function deployDirection(index: SensorDeploy, value: number): void {
@@ -94,7 +133,7 @@ namespace USVAPI {
     //% color=#29D215
     //% subcategory=USV
     //% group="Sensor Deployment"
-    //% blockId=USV_Crane_Stop
+    //% blockId=USV_Deploy_Stop
     //% block="Stop Deploy"
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
     export function deployStop(): void {
