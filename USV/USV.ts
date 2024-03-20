@@ -1,5 +1,25 @@
 namespace USV {
 
+    let Arm = 0;
+    //% blockId=armUSV
+    //% block="Arm USV"
+    //% weight=50 
+    //% color=#2bd9ad
+    //% subcategory=USV
+    //% group="1. Startup"
+    export function armUSV() {
+        let Arm = 1
+    }
+
+    //% blockId=1disarmUSV
+    //% block="Disarm USV"
+    //% weight=50 
+    //% color=#2bd9ad
+    //% subcategory=USV
+    //% group="1. Startup"
+    export function disarmUSV() {
+        let Arm = 0
+    }
 
     export enum direction {
         //% block="Forward Fast"
@@ -32,33 +52,39 @@ namespace USV {
     //% weight=50 
     //% color=#7F74D5
     //% subcategory=USV
-    //% group="Movement"
+    //% group="2. Movement"
     //% blockId=USV_Motor block="Move |%Motor|%speed for |%ms seconds"
     //% speed.min=60 speed.max=120
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
-    export function USV_Motor(index: Motors, speed: direction, sec: number): void {
-        if (index == 0) {
-            for(let index = 0; index <= sec; index++) {
-                for (let index = 0; index <= 10; index++) {
-                    basic.pause(100)
-                    radio.sendValue("left", speed)
+    export function USV_Motor(motor: Motors, speed: direction, sec: number): void {
+        if (motor == 0) {
+            if (Arm == 1) {
+                for (let index = 0; index <= sec; index++) {
+                    for (let index = 0; index <= 10; index++) {
+                        basic.pause(100)
+                        radio.sendValue("left", speed)
+                    }
                 }
             }
         }
-        if (index == 1) {
-            for (let index = 0; index <= sec; index++) {
-                for (let index = 0; index <= 10; index++) {
-                    basic.pause(100)
-                    radio.sendValue("right", speed)
+        if (motor == 1) {
+            if (Arm == 1) {
+                for (let index = 0; index <= sec; index++) {
+                    for (let index = 0; index <= 10; index++) {
+                        basic.pause(100)
+                        radio.sendValue("right", speed)
+                    }
                 }
             }
         }
-        if (index == 2) {
-            for (let index = 0; index <= sec; index++) {
-                for (let index = 0; index <= 10; index++){
-                    basic.pause(100)
-                    radio.sendValue("left", speed)
-                    radio.sendValue("right", speed)
+        if (motor == 2) {
+            if (Arm == 1) {
+                for (let index = 0; index <= sec; index++) {
+                    for (let index = 0; index <= 10; index++) {
+                        basic.pause(100)
+                        radio.sendValue("left", speed)
+                        radio.sendValue("right", speed)
+                    }
                 }
             }
         }
@@ -69,33 +95,11 @@ namespace USV {
     //% weight=50 
     //% color=#7F74D5
     //% subcategory=USV
-    //% group="Movement"
+    //% group="2. Movement"
     export function stopMotors() {
         radio.sendValue("left", 90)
         radio.sendValue("right", 90)
     }
-
-
-    //% blockId=ArmUSV
-    //% block="Arm USV"
-    //% weight=50 
-    //% color=#7F74D5
-    //% subcategory=USV
-    //% group="Startup"
-    export function armUSV() {
-        let Arm = 1
-    }
-
-    //% blockId=disarmUSV
-    //% block="Disarm USV"
-    //% weight=50 
-    //% color=#7F74D5
-    //% subcategory=USV
-    //% group="Startup"
-    export function disarmUSV() {
-        let Arm = 0
-    }
-
 
     export enum SensorDeploy {
         //%blockId=sensor_down
@@ -112,17 +116,17 @@ namespace USV {
     //% weight=50 
     //% color=#29D215
     //% subcategory=USV
-    //% group="Sensor Deployment"
+    //% group="3. Sensor Deployment"
     //% blockId=USV_Deploy
     //% block="Sensor Deploy |%Motor for %number seconds"
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
-    export function deployDirection(index: SensorDeploy, value: number): void {
-        if (index == 0) {
+    export function deployDirection(sensorState: SensorDeploy, value: number): void {
+        if (sensorState == 0) {
             radio.sendValue("down", 0)
             basic.pause(value * 1000)
             radio.sendValue("stop", 0)
         }
-        if (index == 1) {
+        if (sensorState == 1) {
             radio.sendValue("up", 0)
             basic.pause(value * 1000)
             radio.sendValue("stop", 0)
@@ -132,7 +136,7 @@ namespace USV {
     //% weight=50 
     //% color=#29D215
     //% subcategory=USV
-    //% group="Sensor Deployment"
+    //% group="3. Sensor Deployment"
     //% blockId=USV_Deploy_Stop
     //% block="Stop Deploy"
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
