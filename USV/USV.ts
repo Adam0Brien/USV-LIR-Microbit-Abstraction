@@ -47,13 +47,13 @@ namespace USV {
     }
 
     /**
-     * Configure the USV Servos.
+     * Configure the USVs Thrusters.
      */
     //% weight=50 
     //% color=#7F74D5
     //% subcategory=USV
     //% group="2. Movement"
-    //% blockId=USV_Motor block="Move |%Motor|%speed for |%ms seconds"
+    //% blockId=USV_Motors block="Move |%Motor|%speed for |%ms seconds"
     //% speed.min=60 speed.max=120
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
     export function USV_Motor(motor: Motors, speed: direction, sec: number): void {
@@ -144,7 +144,7 @@ namespace USV {
         radio.sendValue("stop", 0)
     }
 
-
+    
     //% blockId=getTempC
     //% block="Sensor Pod Temperature °C"
     //% subcategory=Sensor Pod
