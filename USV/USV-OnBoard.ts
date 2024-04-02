@@ -1,37 +1,75 @@
-// https://makecode.microbit.org/S76714-87804-82233-11443
-
-// heartbeat
-radio.onReceivedValueDeprecated(function (name, value) {
-    led.toggle(2, 4)
-    if (name == "right") {
-        serial.writeLine("right" + ("" + Math.abs(value - 5)))
-        timerCounter = 0
-        led.toggle(0, 4)
-        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, Math.abs(value - 5))
+function CorrectCourse (degreeDiff: number) {
+    if (degreeDiff <= -80 || degreeDiff >= 80) {
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 85)
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 85)
     }
-    if (name == "left") {
-        timerCounter = 0
-        led.toggle(4, 0)
-        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, Math.abs(value - 6))
+    if (degreeDiff <= 30 && degreeDiff >= -30) {
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 92)
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 78)
     }
-    if ("up" == name) {
-        timerCounter = 0
-        USV_OnBoard.deployDirection(USV_OnBoard.SensorDeploy.up)
-    } else if ("down" == name) {
-        timerCounter = 0
-        USV_OnBoard.deployDirection(USV_OnBoard.SensorDeploy.down)
-    } else if ("stop" == name) {
-        timerCounter = 0
-        USV_OnBoard.deployDirection(USV_OnBoard.SensorDeploy.stop)
+    if (degreeDiff >= 31 && degreeDiff <= 81) {
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 85)
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 78)
+    } else if (degreeDiff <= -31 && degreeDiff >= -81) {
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 92)
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 85)
     }
-})
+}
 input.onButtonPressed(Button.A, function () {
-    Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo4, 180)
+    USVMode = 0
 })
+function shortestPathToCourse (actualDegree: number, intendedDegree: number) {
+    intendedDegree = intendedDirection
+    degreeDifference = intendedDegree - actualDegree
+    if (degreeDifference > 180) {
+        degreeDifference += 0 - 360
+    } else if (degreeDifference < -180) {
+        degreeDifference += 360
+    }
+    serial.writeLine("" + (degreeDifference))
+    return degreeDifference
+}
 input.onButtonPressed(Button.B, function () {
-    Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo4, 0)
+    USVMode = 1
 })
+radio.onReceivedValue(function (name, value) {
+    led.toggle(2, 4)
+    if (USVMode == 0) {
+        if (name == "right") {
+            serial.writeLine("right" + ("" + Math.abs(value - 5)))
+            timerCounter = 0
+            led.toggle(0, 4)
+            Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, Math.abs(value - 5))
+        }
+        if (name == "left") {
+            timerCounter = 0
+            led.toggle(4, 0)
+            Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, Math.abs(value - 6))
+        }
+    } else if (USVMode == 1) {
+        timerCounter = 0
+        if (name == "aCompass") {
+            led.toggle(0, 1)
+            // Example usage (assuming actualDegree and intendedDirection are obtained from sensors/inputs)
+            // Example actual degree
+            actualDegree = value
+        } else if (name == "dCompass") {
+            led.toggle(0, 2)
+            intendedDirection = value
+        }
+        degreeDifference2 = shortestPathToCourse(actualDegree, intendedDegree)
+        CorrectCourse(degreeDifference2)
+        led.toggle(4, 4)
+    }
+})
+let degreeDifference2 = 0
+let actualDegree = 0
+let degreeDifference = 0
+let intendedDirection = 0
+let intendedDegree = 0
 let timerCounter = 0
+let USVMode = 0
+USVMode = 0
 timerCounter = 0
 basic.showLeds(`
     . . . . .
@@ -40,7 +78,7 @@ basic.showLeds(`
     . . . . .
     # . . . .
     `)
-radio.setGroup(1)
+radio.setGroup(73)
 basic.forever(function () {
     led.toggle(2, 2)
     timerCounter += 1
