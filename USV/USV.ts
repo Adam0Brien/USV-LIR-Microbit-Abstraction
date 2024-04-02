@@ -1,12 +1,12 @@
 namespace USV {
 
-    let Arm = 0;
+    let Arm = 1;
     //% blockId=armUSV
     //% block="Arm USV"
     //% weight=50 
     //% color=#2bd9ad
     //% subcategory=USV
-    //% group="1. Startup"
+    //% group="A. Startup"
     export function armUSV() {
         let Arm = 1
     }
@@ -16,18 +16,19 @@ namespace USV {
     //% weight=50 
     //% color=#2bd9ad
     //% subcategory=USV
-    //% group="1. Startup"
+    //% group="A. Startup"
     export function disarmUSV() {
+        USV.stopMotors()
         let Arm = 0
     }
 
-    export enum direction {
+    export enum Speed {
         //% block="Forward Fast"
         ForwardFast = 120,
         //% block="Backward Fast"
         BackwardsFast = 60,
         //% block="Forward Slow"
-        ForwardSlow = 95,
+        ForwardSlow = 100,
         //% block="Backward Slow"
         BackwardSlow = 80,
         //% block="Stop"
@@ -45,19 +46,18 @@ namespace USV {
         //% block="All Motors"
         Both = 2
     }
-
     /**
-     * Configure the USVs Thrusters.
+     * Configure the USV Servos.
      */
     //% weight=50 
     //% color=#7F74D5
     //% subcategory=USV
-    //% group="2. Movement"
-    //% blockId=USV_Motors block="Move |%Motor|%speed for |%ms seconds"
+    //% group="B. Movement"
+    //% blockId=USV_Motor block="Move |%Motor|%speed for |%ms seconds"
     //% speed.min=60 speed.max=120
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
-    export function USV_Motor(motor: Motors, speed: direction, sec: number): void {
-        if (motor == 0) {
+    export function USV_Motor(motor: Motors, speed: Speed, sec: number): void {
+        if(motor == 0) {
             if (Arm == 1) {
                 for (let index = 0; index <= sec; index++) {
                     for (let index = 0; index <= 10; index++) {
@@ -69,22 +69,18 @@ namespace USV {
         }
         if (motor == 1) {
             if (Arm == 1) {
-                for (let index = 0; index <= sec; index++) {
-                    for (let index = 0; index <= 10; index++) {
-                        basic.pause(100)
-                        radio.sendValue("right", speed)
-                    }
+                for (let index = 0; index < 100; index++) {
+                    radio.sendValue("right", 100)
+                    basic.pause(100)
                 }
             }
         }
         if (motor == 2) {
             if (Arm == 1) {
                 for (let index = 0; index <= sec; index++) {
-                    for (let index = 0; index <= 10; index++) {
-                        basic.pause(100)
                         radio.sendValue("left", speed)
                         radio.sendValue("right", speed)
-                    }
+                        basic.pause(100)
                 }
             }
         }
@@ -95,7 +91,7 @@ namespace USV {
     //% weight=50 
     //% color=#7F74D5
     //% subcategory=USV
-    //% group="2. Movement"
+    //% group="B. Movement"
     export function stopMotors() {
         radio.sendValue("left", 90)
         radio.sendValue("right", 90)
@@ -107,7 +103,7 @@ namespace USV {
         down = 0,
         //%blockId=sensor_up
         //% block="Up"
-        up = 1
+        up = 1 
     }
 
     /**
@@ -116,7 +112,7 @@ namespace USV {
     //% weight=50 
     //% color=#29D215
     //% subcategory=USV
-    //% group="3. Sensor Deployment"
+    //% group="C. Sensor Deployment"
     //% blockId=USV_Deploy
     //% block="Sensor Deploy |%Motor for %number seconds"
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
@@ -136,7 +132,7 @@ namespace USV {
     //% weight=50 
     //% color=#29D215
     //% subcategory=USV
-    //% group="3. Sensor Deployment"
+    //% group="C. Sensor Deployment"
     //% blockId=USV_Deploy_Stop
     //% block="Stop Deploy"
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
@@ -144,7 +140,32 @@ namespace USV {
         radio.sendValue("stop", 0)
     }
 
-    
+    export enum Direction {
+        //% block="North"
+        North = 0,
+        //% block="East"
+        East = 90,
+        //% block="West"
+        West = 270,
+        //% block="South"
+        South = 180,
+
+    }
+    /**
+     * Configure the USV to Auto Drive.
+     */
+    //% weight=50 
+    //% color=#7F76AB
+    //% subcategory=USV
+    //% group="D. Auto Movement"
+    //% blockId=AUTO_USV block="Auto Drive |%Direction"
+    //% speed.min=60 speed.max=120
+    //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
+    export function AUTO_USV(direction: Direction): void {
+            radio.sendValue("dCompass", direction)
+    }
+
+
     //% blockId=getTempC
     //% block="Sensor Pod Temperature °C"
     //% subcategory=Sensor Pod
@@ -185,6 +206,6 @@ namespace USV {
         return 0
     }
 
-
+    
 }
 
