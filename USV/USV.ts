@@ -69,18 +69,22 @@ namespace USV {
         }
         if (motor == 1) {
             if (Arm == 1) {
-                for (let index = 0; index < 100; index++) {
-                    radio.sendValue("right", 100)
-                    basic.pause(100)
+                for (let index = 0; index <= sec; index++) {
+                    for (let index = 0; index <= 10; index++) {
+                        basic.pause(100)
+                        radio.sendValue("right", speed)
+                    }
                 }
             }
         }
         if (motor == 2) {
             if (Arm == 1) {
                 for (let index = 0; index <= sec; index++) {
+                    for (let index = 0; index <= 10; index++) {
                         radio.sendValue("left", speed)
                         radio.sendValue("right", speed)
                         basic.pause(100)
+                    }
                 }
             }
         }
@@ -103,7 +107,8 @@ namespace USV {
         down = 0,
         //%blockId=sensor_up
         //% block="Up"
-        up = 1 
+        up = 1
+        
     }
 
     /**
@@ -158,13 +163,39 @@ namespace USV {
     //% color=#7F76AB
     //% subcategory=USV
     //% group="D. Auto Movement"
-    //% blockId=AUTO_USV block="Auto Drive |%Direction"
+    //% blockId=AUTO_USV block="Auto Drive |%Direction for %number seconds"
     //% speed.min=60 speed.max=120
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
-    export function AUTO_USV(direction: Direction): void {
+    export function AUTO_USV(direction: Direction, sec: number): void {
+        for (let index = 0; index <= sec; index++) {
+            for (let index = 0; index <= 10; index++) {
             radio.sendValue("dCompass", direction)
+            }
+        }
     }
 
+    function directionToDegree(direction: string) {
+        if (direction == "N") {
+            return 0
+        } else if (direction == "NE") {
+            return 45
+        } else if (direction == "E") {
+            return 90
+        } else if (direction == "SE") {
+            return 135
+        } else if (direction == "S") {
+            return 180
+        } else if (direction == "SW") {
+            return 225
+        } else if (direction == "W") {
+            return 270
+        } else if (direction == "NW") {
+            return 315
+        } else {
+            // Default to North if unknown
+            return 0
+        }
+    }
 
     //% blockId=getTempC
     //% block="Sensor Pod Temperature °C"
