@@ -62,7 +62,7 @@ namespace USV {
                 for (let index = 0; index <= sec; index++) {
                     for (let index = 0; index <= 10; index++) {
                         basic.pause(100)
-                        radio.sendValue("left", speed)
+                        radio.sendValue("left", 180 - speed)
                     }
                 }
             }
@@ -81,7 +81,7 @@ namespace USV {
             if (Arm == 1) {
                 for (let index = 0; index <= sec; index++) {
                     for (let index = 0; index <= 10; index++) {
-                        radio.sendValue("left", speed)
+                        radio.sendValue("left", 180 - speed)
                         radio.sendValue("right", speed)
                         basic.pause(100)
                     }
