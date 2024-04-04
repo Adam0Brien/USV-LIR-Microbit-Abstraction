@@ -1,19 +1,24 @@
-// Starter Implementation
-// Change on button A and B pressed to physical circuit
 input.onButtonPressed(Button.A, function () {
     isSubmerged = 0
 })
 input.onButtonPressed(Button.B, function () {
     isSubmerged = 1
 })
+radio.onReceivedValue(function (name, value) {
+    if (name == "up") {
+        isSubmerged = 0
+    } else if (name == "down") {
+        isSubmerged = 1
+    }
+})
 let isSubmerged = 0
-radio.setGroup(213)
+radio.setGroup(73)
 basic.showIcon(IconNames.Yes)
 USVSensorPod.initLocalDisplay()
 let ph_list: number[] = []
 let light_list: number[] = []
 let temp_list: number[] = []
-isSubmerged = 1
+isSubmerged = 0
 basic.forever(function () {
     USVSensorPod.ShowString("Temp:" + USVSensorPod.calculateTempC() + "°C", 0, 0)
     USVSensorPod.ShowString("pH:" + USVSensorPod.calculatePh(), 0, 1)
