@@ -1,3 +1,5 @@
+// https://makecode.microbit.org/S59727-14370-08773-69640
+
 input.onButtonPressed(Button.A, function () {
     USV.deployDirection(USV.SensorDeploy.down, 1)
     basic.pause(100)
