@@ -6,8 +6,6 @@ input.onButtonPressed(Button.A, function () {
 input.onButtonPressed(Button.B, function () {
     isSubmerged = 1
 })
-
-
 let isSubmerged = 0
 radio.setGroup(213)
 basic.showIcon(IconNames.Yes)
@@ -41,7 +39,7 @@ basic.forever(function () {
 basic.forever(function () {
     if (isSubmerged == 0) {
         for (let value of light_list) {
-            radio.sendValue("l", value)
+            radio.sendValue("light", value)
             basic.pause(1000)
             led.toggle(0, 0)
             light_list.removeAt(light_list.indexOf(value))
