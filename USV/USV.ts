@@ -11,7 +11,7 @@ namespace USV {
         let Arm = 1
     }
 
-    //% blockId=1disarmUSV
+    //% blockId=disarmUSV
     //% block="Disarm USV"
     //% weight=50 
     //% color=#2bd9ad
@@ -197,44 +197,38 @@ namespace USV {
         }
     }
 
-    //% blockId=getTempC
-    //% block="Sensor Pod Temperature °C"
-    //% subcategory=Sensor Pod
-    //% color=#442FDE
-    //% group="Sensors"
-    export function getTempC(): number {
-        // Ask sensor pod for temperature through radio
-        return 0
+
+    export enum SensorType {
+        pH = 0,
+        tempC = 1,
+        light = 2,
     }
 
-    //% blockId=getTempF
-    //% block="Sensor Pod Temperature °F"
-    //% subcategory=Sensor Pod
-    //% color=#442FDE
-    //% group="Sensors"
-    export function getTempF(): number {
-        // Ask sensor pod for temperature
-        return 0
+    function sensorListener(sensorType: SensorType) {
+        let sensorName: string;
+        
+        if(sensorType == 0) {
+                sensorName = "pH";
+            } else if (sensorType == 1){
+                sensorName = "tempC";
+            } else if (sensorType == 2) {
+                sensorName = "light";
+        }
+
+        radio.onReceivedValue(function (name, value) {
+            if (name == sensorName) {
+                serial.writeValue(name, value);
+            }
+        });
     }
 
-    //% blockId=getPh
-    //% block="Sensor Pod pH"
-    //% subcategory=Sensor Pod
+    //% blockId="sensorListenerBlock"
+    //% block="Listen for Sensor Pod |%SensorType value"
+    //% subcategory="Sensors"
     //% color=#442FDE
     //% group="Sensors"
-    export function getPh(): number {
-        // Ask sensor pod for pH
-        return 0
-    }
-
-    //% blockId=Sensor Pod Light
-    //% block="Sensor Pod Light"
-    //% subcategory=Sensor Pod
-    //% color=#442FDE
-    //% group="Sensors"
-    export function getLight(): number {
-        // Ask sensor pod for LDR reading
-        return 0
+    export function sensorListenerBlock(sensorType: SensorType): void {
+        sensorListener(sensorType);
     }
 
     
