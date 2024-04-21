@@ -1,23 +1,3 @@
-function CorrectCourse (degreeDiff: number) {
-    if (degreeDiff <= -80 || degreeDiff >= 80) {
-        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 85)
-        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 85)
-    }
-    if (degreeDiff <= 30 && degreeDiff >= -30) {
-        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 92)
-        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 78)
-    }
-    if (degreeDiff >= 31 && degreeDiff <= 81) {
-        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 85)
-        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 78)
-    } else if (degreeDiff <= -31 && degreeDiff >= -81) {
-        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 92)
-        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 85)
-    }
-}
-input.onButtonPressed(Button.A, function () {
-    USVMode = 0
-})
 function shortestPathToCourse (actualDegree: number, intendedDegree: number) {
     intendedDegree = intendedDirection
     degreeDifference = intendedDegree - actualDegree
@@ -29,11 +9,15 @@ function shortestPathToCourse (actualDegree: number, intendedDegree: number) {
     serial.writeLine("" + (degreeDifference))
     return degreeDifference
 }
-input.onButtonPressed(Button.B, function () {
-    USVMode = 1
-})
 radio.onReceivedValue(function (name, value) {
     led.toggle(2, 4)
+    if (name == "Mode") {
+        if (value == 0) {
+            USVMode = 0
+        } else if (value == 1) {
+            USVMode = 1
+        }
+    }
     if (USVMode == 0) {
         if (name == "right") {
             serial.writeLine("right" + ("" + Math.abs(value - 5)))
@@ -57,12 +41,34 @@ radio.onReceivedValue(function (name, value) {
             led.toggle(0, 2)
             intendedDirection = value
         }
+        if (name == "ar") {
+            speed = value
+        }
         degreeDifference2 = shortestPathToCourse(actualDegree, intendedDegree)
-        CorrectCourse(degreeDifference2)
+        correctCourse(degreeDifference2, speed)
         led.toggle(4, 4)
     }
 })
+function correctCourse (degreeDiff: number, speed: number) {
+    radio.sendValue("diff", degreeDiff)
+    if (degreeDiff <= -80 || degreeDiff >= 80) {
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, speed)
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, speed - 180)
+    }
+    if (degreeDiff <= 30 && degreeDiff >= -30) {
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 92)
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 78)
+    }
+    if (degreeDiff >= 31 && degreeDiff <= 81) {
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 85)
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 78)
+    } else if (degreeDiff <= -31 && degreeDiff >= -81) {
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 92)
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 85)
+    }
+}
 let degreeDifference2 = 0
+let speed = 0
 let actualDegree = 0
 let degreeDifference = 0
 let intendedDirection = 0
