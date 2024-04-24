@@ -1,6 +1,5 @@
 namespace USV {
 
-    let Arm = 1;
     //% blockId=armUSVManual
     //% block="Arm USV Manual"
     //% weight=50 
@@ -8,8 +7,7 @@ namespace USV {
     //% subcategory=USV
     //% group="A. Startup"
     export function armUSVManual() {
-        let Arm = 0
-        radio.sendValue("mode", 0)
+        radio.sendNumber(0)
     }
 
     //% blockId=armUSVAuto
@@ -19,8 +17,7 @@ namespace USV {
     //% subcategory=USV
     //% group="A. Startup"
     export function armUSVAuto() {
-        let Arm = 1
-        radio.sendValue("mode", 1)
+        radio.sendNumber(1)
     }
 
     //% blockId=disarmUSV
@@ -31,8 +28,7 @@ namespace USV {
     //% group="A. Startup"
     export function disarmUSV() {
         USV.stopMotors()
-        let Arm = 9 // Any number which does not satisfty any motor drive check
-        radio.sendValue("mode", 9)
+        radio.sendNumber(9)
     }
 
     export enum Speed {
@@ -72,27 +68,22 @@ namespace USV {
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
     export function USV_Motor(motor: Motors, speed: Speed, sec: number): void {
         if (motor == 0) {
-            if (Arm == 0) {
                 for (let index = 0; index <= sec; index++) {
                     for (let index = 0; index <= 10; index++) {
                         basic.pause(100)
                         radio.sendValue("left", 180 - speed)
                     }
                 }
-            }
         }
         if (motor == 1) {
-            if (Arm == 0) {
                 for (let index = 0; index <= sec; index++) {
                     for (let index = 0; index <= 10; index++) {
                         basic.pause(100)
                         radio.sendValue("right", speed)
                     }
                 }
-            }
         }
         if (motor == 2) {
-            if (Arm == 0) {
                 for (let index = 0; index <= sec; index++) {
                     for (let index = 0; index <= 10; index++) {
                         radio.sendValue("left", 180 - speed)
@@ -101,7 +92,6 @@ namespace USV {
                     }
                 }
             }
-        }
     }
 
 
@@ -119,27 +109,22 @@ namespace USV {
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
     export function USV_Motor_Contol(motor: Motors, speed: number, sec: number): void {
         if (motor == 0) {
-            if (Arm == 0) {
                 for (let index = 0; index <= sec; index++) {
                     for (let index = 0; index <= 10; index++) {
                         basic.pause(100)
                         radio.sendValue("left", 180 - speed)
                     }
                 }
-            }
         }
         if (motor == 1) {
-            if (Arm == 0) {
                 for (let index = 0; index <= sec; index++) {
                     for (let index = 0; index <= 10; index++) {
                         basic.pause(100)
                         radio.sendValue("right", speed)
                     }
                 }
-            }
         }
         if (motor == 2) {
-            if (Arm == 0) {
                 for (let index = 0; index <= sec; index++) {
                     for (let index = 0; index <= 10; index++) {
                         radio.sendValue("left", 180 - speed)
@@ -147,7 +132,6 @@ namespace USV {
                         basic.pause(100)
                     }
                 }
-            }
         }
     }
 
@@ -185,14 +169,14 @@ namespace USV {
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
     export function deployDirection(sensorState: SensorDeploy, sec: number): void {
         if (sensorState == 0) {
-            radio.sendValue("down", 0)
+            radio.sendString("down")
             basic.pause(sec * 1000)
-            radio.sendValue("stop", 0)
+            radio.sendString("stop")
         }
         if (sensorState == 1) {
-            radio.sendValue("up", 0)
+            radio.sendString("up")
             basic.pause(sec * 1000)
-            radio.sendValue("stop", 0)
+            radio.sendString("stop")
         }
     }
 
@@ -229,7 +213,7 @@ namespace USV {
     //% speed.min=60 speed.max=120 speed.defl=90
     //% sec.min=1 sec.max=120 sec.defl=1
     //% index.fieldEditor="gridpicker" index.fieldOptions.columns=2
-    export function AUTO_USV(direction: Direction,speed: number, sec: number): void {
+    export function AUTO_USV(direction: Direction, speed: number, sec: number): void {
         for (let index = 0; index <= sec; index++) {
             for (let index = 0; index <= 10; index++) {
                 radio.sendValue("dCompass", direction)

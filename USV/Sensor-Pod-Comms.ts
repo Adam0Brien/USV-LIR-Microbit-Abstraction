@@ -7,7 +7,7 @@ input.onButtonPressed(Button.B, function () {
     isSubmerged = 1
 })
 let isSubmerged = 0
-radio.setGroup(213)
+radio.setGroup(73)
 basic.showIcon(IconNames.Yes)
 USVSensorPod.initLocalDisplay()
 let ph_list: number[] = []
