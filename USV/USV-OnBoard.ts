@@ -1,8 +1,10 @@
 radio.onReceivedNumber(function (receivedNumber) {
     if (receivedNumber == 0) {
         USVMode = 0
+        led.plot(0, 0)
     } else if (receivedNumber == 1) {
         USVMode = 1
+        led.plot(0, 1)
     }
 })
 function shortestPathToCourse (actualDegree: number, intendedDegree: number) {
@@ -44,7 +46,7 @@ radio.onReceivedValue(function (name, value) {
         }
     } else if (USVMode == 1) {
         timerCounter = 0
-        if (name == "aCompass") {
+        if (name == "aC") {
             led.toggle(0, 1)
             // Example usage (assuming actualDegree and intendedDirection are obtained from sensors/inputs)
             // Example actual degree
@@ -63,20 +65,18 @@ radio.onReceivedValue(function (name, value) {
 })
 function correctCourse (degreeDiff: number, speed: number) {
     radio.sendValue("diff", degreeDiff)
-    if (degreeDiff <= -80 || degreeDiff >= 80) {
+    if (degreeDiff <= 30 && degreeDiff >= -30) {
         Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, speed)
         Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, speed - 180)
-    }
-    if (degreeDiff <= 30 && degreeDiff >= -30) {
+        serial.writeString("Straight")
+    } else if (degreeDiff > 30) {
         Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 92)
         Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 78)
-    }
-    if (degreeDiff >= 31 && degreeDiff <= 81) {
-        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 85)
-        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 78)
-    } else if (degreeDiff <= -31 && degreeDiff >= -81) {
-        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 92)
-        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 85)
+        serial.writeString("Left")
+    } else if (degreeDiff < -30) {
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo1, 78)
+        Kitronik_Robotics_Board.servoWrite(Kitronik_Robotics_Board.Servos.Servo2, 92)
+        serial.writeString("Right")
     }
 }
 let degreeDifference2 = 0
@@ -98,7 +98,7 @@ basic.showLeds(`
     `)
 radio.setGroup(73)
 basic.forever(function () {
-    led.toggle(2, 2)
+    led.toggle(2, 0)
     timerCounter += 1
     if (timerCounter > 5) {
         basic.showLeds(`
